@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>RSS to JSON</title>
+</head>
+<body>
+<script>
+  async function fetchRSS() {
+    const rssUrl = 'https://rss.app/feeds/0qesnZU4bYs9UEhQ.xml';
+    const res = await fetch(rssUrl);
+    const xmlText = await res.text();
+
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(xmlText, "text/xml");
+    const items = xml.querySelectorAll("item");
+    const result = [];
+
+    items.forEach(item => {
+      result.push({
+        title: item.querySelector("title")?.textContent,
+        link: item.querySelector("link")?.textContent,
+        description: item.querySelector("description")?.textContent
+      });
+    });
+
+    document.body.innerText = JSON.stringify(result, null, 2);
+  }
+
+  fetchRSS();
+</script>
+</body>
+</html>

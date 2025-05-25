@@ -1,0 +1,31 @@
+name: Aggiorna feed TikTok
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # ogni ora, all'inizio dell'ora
+  workflow_dispatch: # per lanciarlo manualmente
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Aggiorna feed
+        run: |
+          # Comandi per aggiornare il feed (dipende dallo script che usi)
+          # Se usi tiktok-rss-flat, qui esegui il comando per generare il feed
+          # Ad esempio:
+          node update-feed.js
+
+      - name: Commit e push aggiornamenti
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Aggiorna feed TikTok automaticamente"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
